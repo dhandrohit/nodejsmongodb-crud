@@ -122,4 +122,25 @@ function queryDocumentWithCondition(url){
         console.log("Error connecting to MongoDB...", error);
     }
 }
-queryDocumentWithCondition(url);
+// queryDocumentWithCondition(url);
+//7. Deletion of the documents within the collection
+function deleteDocument(url){
+    try{
+        MongoClient.connect(url, {useUnifiedTopology: true}, function(err, db){
+            if(err) throw err;
+            console.log("Connected to the MongoDB instance....");
+            var database = db.db("rkv");
+            let query = { dname: /^T/ };
+            database.collection("dept").deleteMany(query,function(err, result){
+                if(err) throw err;
+                console.log("Record Deleted ", result);
+                db.close()
+            });
+        });
+
+    }catch(error){
+        console.log("Error connecting to MongoDB...", error);
+    }
+}
+deleteDocument(url);
+

@@ -142,5 +142,25 @@ function deleteDocument(url){
         console.log("Error connecting to MongoDB...", error);
     }
 }
-deleteDocument(url);
+// deleteDocument(url);
+//8. Updating a single document / multiple documents
+function updateDocument(url){
+    try{
+        MongoClient.connect(url, {useUnifiedTopology: true}, function(err, db){
+            if(err) throw err;
+            console.log("Connected to the MongoDB instance....");
+            var database = db.db("rkv");
+            let condition = { dname: /^T/ };
+            let newValues = { $set: {dname: "New Department"}};
+            database.collection("dept").updateMany(condition, newValues, function(err, result){
+                if(err) throw err;
+                console.log("Record Updated ", result);
+                db.close()
+            });
+        });
 
+    }catch(error){
+        console.log("Error connecting to MongoDB...", error);
+    }
+}
+updateDocument(url);
